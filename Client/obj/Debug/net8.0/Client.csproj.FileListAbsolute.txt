@@ -1,0 +1,14 @@
+C:\Users\user\Documents\DotNetChat\Client\bin\Debug\net8.0\Client.exe
+C:\Users\user\Documents\DotNetChat\Client\bin\Debug\net8.0\Client.deps.json
+C:\Users\user\Documents\DotNetChat\Client\bin\Debug\net8.0\Client.runtimeconfig.json
+C:\Users\user\Documents\DotNetChat\Client\bin\Debug\net8.0\Client.dll
+C:\Users\user\Documents\DotNetChat\Client\bin\Debug\net8.0\Client.pdb
+C:\Users\user\Documents\DotNetChat\Client\obj\Debug\net8.0\Client.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\Documents\DotNetChat\Client\obj\Debug\net8.0\Client.AssemblyInfoInputs.cache
+C:\Users\user\Documents\DotNetChat\Client\obj\Debug\net8.0\Client.AssemblyInfo.cs
+C:\Users\user\Documents\DotNetChat\Client\obj\Debug\net8.0\Client.csproj.CoreCompileInputs.cache
+C:\Users\user\Documents\DotNetChat\Client\obj\Debug\net8.0\Client.dll
+C:\Users\user\Documents\DotNetChat\Client\obj\Debug\net8.0\refint\Client.dll
+C:\Users\user\Documents\DotNetChat\Client\obj\Debug\net8.0\Client.pdb
+C:\Users\user\Documents\DotNetChat\Client\obj\Debug\net8.0\Client.genruntimeconfig.cache
+C:\Users\user\Documents\DotNetChat\Client\obj\Debug\net8.0\ref\Client.dll
