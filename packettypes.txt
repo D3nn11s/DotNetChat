@@ -1,0 +1,21 @@
+Client Packet Types:
+    * LOGIN : 1 (byte Länge, string (der Bytes solange Länge) Username) -> (byte Länge, REST Token)
+    * DISCONNECT : 2 (byte CauseID)
+    * MSG : 4  (ushort Length, string Message)
+    * PM : 5 (byte Länge, string username,  byte LängeMessage, string Message) 
+    * SYNC : 6
+    * RECONNECT : 7 (byte Länge, string Token)
+    
+Server Packet Types:
+   * ERROR : 1 (byte PacketType, byte FehlerID)
+   * MSG : 2 (byte Länge, string username, byte längeMessage, string message)
+   * DISCONNECT : 3 (byte CauseID)
+   * SYNCRESPONSE: 4 (byte anzahlnachrichten(* MSG : 2 (byte Länge, string username, byte längeMessage, string message))
+   * SUCCESS: 5
+   
+SESSION BENINGING: 1 6 Albert 4 5 Hallo 4 6 Netter
+
+-> 7 128 aijshfduaizsgfugzs
+<- 5 :thumbs_up:
+-> 6
+<- 4 15 5 (Länge des Usernames) Jarno65 Digger 3 ABC 4 DEFG ...
