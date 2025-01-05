@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Navigation;
 
 namespace Client
@@ -26,7 +28,7 @@ namespace Client
 
         public bool Start()
         {
-            if (username != null) {
+            if (username == null) {
                 return false;
             }
             run = true;
@@ -43,19 +45,34 @@ namespace Client
                 {
                     return false;
                 }
-                client.Connect(endpoint);
                 NetworkStream loginStream = client.GetStream();
                 byte[] usernameBytes = Encoding.Unicode.GetBytes(username);
                 byte[] loginBuffer = new byte[2 + usernameBytes.Length];
                 loginBuffer[0] = (byte)1;
-                loginBuffer[1] = (byte)loginBuffer.Length;
-                loginBuffer.CopyTo(loginBuffer, 2);
-                loginStream.Write(loginBuffer, 0, loginBuffer.Length);
-                // Expect Token or Denial
-                loginStream.Close();
+                loginBuffer[1] = (byte)usernameBytes.Length;
+                usernameBytes.CopyTo(loginBuffer, 2);
+                if (!loginStream.WriteAsync(loginBuffer, 0, loginBuffer.Length).Wait(30000))
+                {
+                    client.Close();
+                    return false;
+                }
+                byte[] buff = new byte[1];
+                loginStream.ReadExactly(buff, 0, 1);
+
             }
             catch (SocketException e)
             {
+                Console.WriteLine(e);
+                return false;
+            }
+            catch (AggregateException e)
+            {
+                MessageBox.Show(e.Message, "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            catch (IOException e)
+            {
+                MessageBox.Show(e.Message, "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
             return true;

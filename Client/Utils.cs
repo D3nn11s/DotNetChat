@@ -40,6 +40,10 @@ namespace Client
             IPEndPoint endpoint = new IPEndPoint(0, 0);
             if (IPEndPoint.TryParse(ip, out endpoint))
             {
+                if (endpoint.Port == 0)
+                {
+                    return (1, null);
+                }
                 return (0, endpoint);
             }
             string[] tokens = ip.Split(':');

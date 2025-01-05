@@ -53,7 +53,14 @@ namespace Client
                 case 0:
                     Global.username = username;
                     Global.IPEndPoint = res;
-                    MessageBox.Show("Connecting to " + res.Address.ToString() + ":" + res.Port + "! (If this worked)" , "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Connecting to " + res.ToString() + "!" , "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Global.connection = new Connection(res, username);
+                    if (!Global.connection.Start())
+                    {
+                        MessageBox.Show(string.Format(Utils.GetErrorMessage(this, "failedToConnect"), res.ToString()), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
+                        break;
+                    }
+                    MessageBox.Show("Connected", "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Information);
                     break;
                 case 1:
                     MessageBox.Show(Utils.GetErrorMessage(this, "ipParseError"), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -62,7 +69,7 @@ namespace Client
                     MessageBox.Show(Utils.GetErrorMessage(this, "invalidHost"), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
                     break;
                 case 3:
-                    MessageBox.Show(String.Format(Utils.GetErrorMessage(this, "invalidPortNumber"), ip.Split(":")[1]), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(string.Format(Utils.GetErrorMessage(this, "invalidPortNumber"), ip.Split(":")[1]), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
                     break;
             }
         }
