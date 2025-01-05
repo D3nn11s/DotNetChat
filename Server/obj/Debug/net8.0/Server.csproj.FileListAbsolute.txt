@@ -1,0 +1,15 @@
+C:\Users\user\Documents\Projects\DotNetChat\Server\obj\Debug\net8.0\Server.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\Documents\Projects\DotNetChat\Server\obj\Debug\net8.0\Server.AssemblyInfoInputs.cache
+C:\Users\user\Documents\Projects\DotNetChat\Server\obj\Debug\net8.0\Server.AssemblyInfo.cs
+C:\Users\user\Documents\Projects\DotNetChat\Server\obj\Debug\net8.0\Server.csproj.CoreCompileInputs.cache
+C:\Users\user\Documents\Projects\DotNetChat\Server\obj\Debug\net8.0\Server.sourcelink.json
+C:\Users\user\Documents\Projects\DotNetChat\Server\bin\Debug\net8.0\Server.exe
+C:\Users\user\Documents\Projects\DotNetChat\Server\bin\Debug\net8.0\Server.deps.json
+C:\Users\user\Documents\Projects\DotNetChat\Server\bin\Debug\net8.0\Server.runtimeconfig.json
+C:\Users\user\Documents\Projects\DotNetChat\Server\bin\Debug\net8.0\Server.dll
+C:\Users\user\Documents\Projects\DotNetChat\Server\bin\Debug\net8.0\Server.pdb
+C:\Users\user\Documents\Projects\DotNetChat\Server\obj\Debug\net8.0\Server.dll
+C:\Users\user\Documents\Projects\DotNetChat\Server\obj\Debug\net8.0\refint\Server.dll
+C:\Users\user\Documents\Projects\DotNetChat\Server\obj\Debug\net8.0\Server.pdb
+C:\Users\user\Documents\Projects\DotNetChat\Server\obj\Debug\net8.0\Server.genruntimeconfig.cache
+C:\Users\user\Documents\Projects\DotNetChat\Server\obj\Debug\net8.0\ref\Server.dll
