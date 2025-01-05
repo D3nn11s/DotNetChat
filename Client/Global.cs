@@ -11,5 +11,6 @@ namespace Client
     {
         public static string username;
         public static IPEndPoint IPEndPoint;
+        public static Connection connection;
     }
 }

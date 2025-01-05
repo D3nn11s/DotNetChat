@@ -51,6 +51,8 @@ namespace Client
             switch (code)
             {
                 case 0:
+                    Global.username = username;
+                    Global.IPEndPoint = res;
                     MessageBox.Show("Connecting to " + res.Address.ToString() + ":" + res.Port + "! (If this worked)" , "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Information);
                     break;
                 case 1:
