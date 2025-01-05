@@ -3,24 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|c:\\users\\liont\\desktop\\dotnetchat\\client\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|c:\\users\\liont\\desktop\\dotnetchat\\client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|c:\\users\\liont\\desktop\\dotnetchat\\client\\utils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|solutionrelative:utils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|c:\\users\\liont\\desktop\\dotnetchat\\client\\resources\\resources.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|solutionrelative:resources\\resources.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|c:\\users\\liont\\desktop\\dotnetchat\\client\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|solutionrelative:app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|c:\\users\\liont\\desktop\\dotnetchat\\client\\resources\\resources.de.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|solutionrelative:resources\\resources.de.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|c:\\users\\liont\\desktop\\dotnetchat\\client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B8528CD3-7218-4239-A15F-F8D881B3626A}|Client.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,65 +22,43 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Resources.de.xaml",
-              "DocumentMoniker": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\Resources\\Resources.de.xaml",
-              "RelativeDocumentMoniker": "Resources\\Resources.de.xaml",
-              "ToolTip": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\Resources\\Resources.de.xaml",
-              "RelativeToolTip": "Resources\\Resources.de.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-01-05T17:37:21.196Z",
+              "DocumentIndex": 1,
+              "Title": "Utils.cs",
+              "DocumentMoniker": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\Utils.cs",
+              "RelativeDocumentMoniker": "Utils.cs",
+              "ToolTip": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\Utils.cs",
+              "RelativeToolTip": "Utils.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAiwEAAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-05T19:59:55.324Z",
+              "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Resources.xaml",
               "DocumentMoniker": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\Resources\\Resources.xaml",
               "RelativeDocumentMoniker": "Resources\\Resources.xaml",
               "ToolTip": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\Resources\\Resources.xaml",
               "RelativeToolTip": "Resources\\Resources.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-01-05T17:36:35.162Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "App.xaml",
-              "DocumentMoniker": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\App.xaml",
-              "RelativeDocumentMoniker": "App.xaml",
-              "ToolTip": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\App.xaml",
-              "RelativeToolTip": "App.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-01-01T19:13:29.861Z",
+              "WhenOpened": "2025-01-05T21:33:56.11Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "MainWindow.xaml",
-              "ToolTip": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\MainWindow.xaml",
-              "RelativeToolTip": "MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-01-01T16:15:16.628Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\liont\\Desktop\\DotNetChat\\Client\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAQwAwAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAACgAAAAAAAAAAAAwwDEAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-01T16:15:13.484Z",
               "EditorCaption": ""

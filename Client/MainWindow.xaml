@@ -6,10 +6,20 @@
         xmlns:local="clr-namespace:Client"
         xmlns:lang="en"
         mc:Ignorable="d"
-        Title="DNC Login" Height="Auto" Width="Auto" d:DesignHeight="144.587">
-    <Grid>
-        <TextBox HorizontalAlignment="Left" Margin="110,34,30,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140"/>
-        <Label Content="{DynamicResource username}" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.873,-5.413"/>
+        Title="DNC Login" Height="Auto" Width="Auto"
+        SizeToContent="WidthAndHeight">
+    <Grid Margin="5,10,0,0">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Label Content="{DynamicResource username}" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.873,-5.413"/>
+                <TextBox x:Name="usernameTextbox" MaxLength="16" HorizontalAlignment="Left" Margin="5,5,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" KeyDown="Textbox_KeyDown"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Label Content="{DynamicResource ip}" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.873,-5.413"/>
+                <TextBox x:Name="ipTextbox" HorizontalAlignment="Left" Margin="5,5,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="lions-heart.de" KeyDown="Textbox_KeyDown"/>
+            </StackPanel>
+            <Button x:Name="connectButton" Content="{DynamicResource connect}" HorizontalAlignment="Center" Margin="0,10,0,15" VerticalAlignment="Top" Click="connectButton_Click"/>
+        </StackPanel>
 
     </Grid>
 </Window>

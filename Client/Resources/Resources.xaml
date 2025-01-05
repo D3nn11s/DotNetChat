@@ -2,4 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
     <system:String x:Key="username">Username</system:String>
+    <system:String x:Key="ip">IP</system:String>
+    <system:String x:Key="connect">Connect</system:String>
+
+    <ResourceDictionary x:Key="errors">
+        <system:String x:Key="failedToConnect">Failed to connect to "{0}"!</system:String>
+        <system:String x:Key="noUsername">You need to provide an Username!</system:String>
+        <system:String x:Key="usernameTaken">The Username "{0}" is already taken in that server!</system:String>
+        <system:String x:Key="ipParseError">Couldn't parse the IP!</system:String>
+        <system:String x:Key="invalidHost">Host not found!</system:String>
+        <system:String x:Key="invalidPortNumber">The Port "{0}" is invalid! Please provide a Port Number between 0 and 65536.</system:String>
+    </ResourceDictionary>
 </ResourceDictionary>
