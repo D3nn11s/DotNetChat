@@ -19,3 +19,6 @@ C:\Users\liont\Desktop\DotNetChat\Client\obj\Debug\net8.0-windows\refint\Client.
 C:\Users\liont\Desktop\DotNetChat\Client\obj\Debug\net8.0-windows\Client.pdb
 C:\Users\liont\Desktop\DotNetChat\Client\obj\Debug\net8.0-windows\Client.genruntimeconfig.cache
 C:\Users\liont\Desktop\DotNetChat\Client\obj\Debug\net8.0-windows\ref\Client.dll
+C:\Users\liont\Desktop\DotNetChat\Client\obj\Debug\net8.0-windows\App.baml
+C:\Users\liont\Desktop\DotNetChat\Client\obj\Debug\net8.0-windows\Resources\Resources.de.baml
+C:\Users\liont\Desktop\DotNetChat\Client\obj\Debug\net8.0-windows\Resources\Resources.baml

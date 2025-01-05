@@ -4,9 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
+        xmlns:lang="en"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="DNC Login" Height="Auto" Width="Auto" d:DesignHeight="144.587">
     <Grid>
+        <TextBox HorizontalAlignment="Left" Margin="110,34,30,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140"/>
+        <Label Content="{DynamicResource username}" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.873,-5.413"/>
 
     </Grid>
 </Window>
