@@ -26,6 +26,12 @@ namespace Client
             this.username = username;
         }
 
+        private void startCThread(NetworkStream stream)
+        {
+            cThread = new Thread(new ParameterizedThreadStart(connectionHandler));
+            cThread.Start();
+        }
+
         public bool Start()
         {
             if (username == null) {
@@ -35,30 +41,48 @@ namespace Client
             client = new TcpClient();
             client.NoDelay = true;
             client.SendTimeout = 5000;
-            client.ReceiveTimeout = 120000;
+            client.ReceiveTimeout = 10000;
             client.ReceiveBufferSize = 8192; // Random for now
             client.ExclusiveAddressUse = false;
             client.LingerState = new LingerOption(true, 2);
             try
             {
+                // First: Connect
                 if (!client.ConnectAsync(endpoint).Wait(10000))
                 {
                     return false;
                 }
-                NetworkStream loginStream = client.GetStream();
+                NetworkStream stream = client.GetStream();
+
+                // Now send our Login Attempt
                 byte[] usernameBytes = Encoding.Unicode.GetBytes(username);
                 byte[] loginBuffer = new byte[2 + usernameBytes.Length];
                 loginBuffer[0] = (byte)1;
                 loginBuffer[1] = (byte)usernameBytes.Length;
                 usernameBytes.CopyTo(loginBuffer, 2);
-                if (!loginStream.WriteAsync(loginBuffer, 0, loginBuffer.Length).Wait(30000))
+                if (!stream.WriteAsync(loginBuffer, 0, loginBuffer.Length).Wait(30000))
                 {
+                    // Could not send bytes :(
                     client.Close();
                     return false;
                 }
-                byte[] buff = new byte[1];
-                loginStream.ReadExactly(buff, 0, 1);
 
+                // Wait for the Tokenlength or Error Packet ID
+                byte[] buf = new byte[1];
+                stream.ReadExactly(buf, 0, 1);
+                int size = buf[0];
+                if (size < 2)
+                {
+                    // Do Error Message Handeling here
+                    // TODO Get Type of Error like "Username Taken"
+                    return false;
+                }
+
+                // Recieve Token
+                buf = new byte[size];
+                stream.ReadExactly(buf, 0, size);
+                token = Encoding.Unicode.GetString(buf);
+                MessageBox.Show(token);
             }
             catch (SocketException e)
             {
@@ -75,6 +99,11 @@ namespace Client
                 MessageBox.Show(e.Message, "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
+
+            // All good now! We should be connected at this point.
+            // Let's start this Client Thread and allow Packets to be parsed.
+            // startCThread(stream)
+
             return true;
         }
 
@@ -85,14 +114,15 @@ namespace Client
             client.Dispose();
         }
 
-        public void connectionHandler()
+        private void connectionHandler(object streamObj)
         {
-            NetworkStream s = client.GetStream();
+            NetworkStream s = (NetworkStream)streamObj;
             try
             {
                 while (run)
                 {
                     // Base Logic
+                    break; // Temporary Breakout
                 }
             } finally
             {

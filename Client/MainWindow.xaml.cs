@@ -41,14 +41,15 @@ namespace Client
                 case 0:
                     Global.username = username;
                     Global.IPEndPoint = res;
-                    MessageBox.Show("Connecting to " + res.ToString() + "!" , "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Information);
                     Global.connection = new Connection(res, username);
                     if (!Global.connection.Start())
                     {
                         MessageBox.Show(string.Format(Utils.GetErrorMessage(this, "failedToConnect"), res.ToString()), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
                         break;
                     }
-                    MessageBox.Show("Connected", "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ChatWindow cw = new ChatWindow();
+                    cw.Show();
+                    this.Close();
                     break;
                 case 1:
                     MessageBox.Show(Utils.GetErrorMessage(this, "ipParseError"), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
