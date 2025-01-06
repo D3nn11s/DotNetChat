@@ -1,14 +1,25 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using System.Reflection.Metadata;
 using System.Text;
 
 namespace Server
 {
     internal class Program
     {
+
+        static HashSet<User> Users = new HashSet<User>();
+
+
         static void Main(string[] args)
         {
-            TcpListener listener = new TcpListener(IPAddress.Any, 5063);
+            TcpListener listener = new TcpListener(IPAddress.IPv6Any, 5063);
+            listener.ExclusiveAddressUse = false;
+            listener.Server.DualMode = true;
+            listener.Server.SendTimeout = 30000;
+            listener.Server.ReceiveTimeout = 30000;
+            listener.Server.ReceiveBufferSize = 32768;
+            listener.Server.SendBufferSize = 32768;
             listener.Start();
 
             Console.WriteLine("Listening...");
@@ -46,7 +57,7 @@ namespace Server
                             connected = false;
                             break;
                         case 1:
-                            Console.WriteLine("login");
+                            Console.WriteLine("Login");
 
                             // Length of username read from the clients first byte
                             int length = stream.ReadByte();
@@ -54,20 +65,28 @@ namespace Server
                             // Reads the username
                             stream.ReadExactly(buffer, 0, length);
 
-                            string content = Encoding.Unicode.GetString(buffer);
-                            Console.WriteLine("Name: " + content);
+                            string username = Encoding.Unicode.GetString(buffer);
+                            Console.WriteLine("Username: " + username);
 
+                            // Check if Username exists,
+                            // if null, then it doesn't exist yet. Allow this user to temporarily own it.
+                            User? exist = Users.FirstOrDefault(user => user.username.Equals(username), null);
+                            if (exist != null)
+                            {
+                                byte[] errorBytes = { 1, 1 };
+                                stream.Write(errorBytes, 0, errorBytes.Length);
+                                break;
+                            }
 
-                            string token = Token.GenerateToken(); // ToDo: Include saving this to the user, object oriented, and stuff like that
-                            byte[] tokenbytes = Encoding.Unicode.GetBytes(token);
+                            Token token = Token.createToken();
+                            byte[] tokenbytes = Encoding.Unicode.GetBytes(token.GetToken());
                             byte[] sendBytes = new byte[tokenbytes.Length + 1];
                             sendBytes[0] = Convert.ToByte(tokenbytes.Length);
                             tokenbytes.CopyTo(sendBytes, 1);
-
                             stream.Write(sendBytes, 0, sendBytes.Length);
 
-
-
+                            thisUser = new User(username, token);
+                            Users.Add(thisUser);
                             break;
                         case 2:
                             Console.WriteLine("Disconnect");
@@ -88,9 +107,10 @@ namespace Server
                 }
             } catch (IOException e)
             {
-                Console.WriteLine("Client Error " + e);
+                Console.WriteLine("Client Error " + e.Message);
             }
             client.Close();
+            client.Dispose();
             Console.WriteLine("Client Disconnected.");
         }
     }

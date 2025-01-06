@@ -54,5 +54,10 @@ namespace Server
 
             return result.ToString();
         }
+
+        public override int GetHashCode()
+        {
+            return this.token.GetHashCode() + this.validUntil.GetHashCode();
+        }
     }
 }

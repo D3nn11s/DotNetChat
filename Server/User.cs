@@ -8,13 +8,18 @@ namespace Server
 {
     public class User
     {
-        string username;
-        Token token;
+        public string username { get; }
+        public Token token { get; }
 
         public User(string username, Token token)
         {
             this.username = username;
             this.token = token;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.username.GetHashCode() + this.token.GetHashCode();
         }
     }
 }
