@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace Client
 {
@@ -82,7 +83,10 @@ namespace Client
                 buf = new byte[size];
                 stream.ReadExactly(buf, 0, size);
                 token = Encoding.Unicode.GetString(buf);
-                MessageBox.Show(token);
+
+                // All good now! We should be connected at this point.
+                // Let's start this Client Thread and allow Packets to be parsed.
+                startCThread(stream);
             }
             catch (SocketException e)
             {
@@ -100,9 +104,8 @@ namespace Client
                 return false;
             }
 
-            // All good now! We should be connected at this point.
-            // Let's start this Client Thread and allow Packets to be parsed.
-            // startCThread(stream)
+            
+            
 
             return true;
         }
@@ -121,6 +124,40 @@ namespace Client
             {
                 while (run)
                 {
+                    int PacketID = s.ReadByte();
+
+                    switch (PacketID)
+                    {
+                        case -1:
+                            run = false;
+                            break;
+                        case 1:
+                            // ERROR : 1 (byte PacketType, byte FehlerID)
+                            break;
+                        case 2:
+                            int length = s.ReadByte();
+                            byte[] buffer = new byte[length];
+
+                            s.ReadExactly(buffer, 0, length);
+
+                            string username = Encoding.Unicode.GetString(buffer);
+                            // TODO: adding messages
+                            break;
+
+                        case 3:
+                            // PM : 3 (byte Länge, string vonUsername, byte längeMessage, string message)
+                            break;
+                        case 4:
+                            // DISCONNECT : 4 (byte CauseID)
+                            break;
+                        case 5:
+                            // SYNCRESPONSE: 5 (byte anzahlnachrichten(* MSG : 2 (byte Länge, string username, byte längeMessage, string message))
+                            break;
+                        case 6:
+                            // Success
+                            break;
+
+                    }
                     // Base Logic
                     break; // Temporary Breakout
                 }
