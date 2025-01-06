@@ -37,7 +37,7 @@ namespace Client
             {
                 if (endpoint.Port == 0)
                 {
-                    return (1, null);
+                    return (0, new IPEndPoint(endpoint.Address, 5063));
                 }
                 return (0, endpoint);
             }
