@@ -29,7 +29,7 @@ namespace Client
         private void startCThread(NetworkStream stream)
         {
             cThread = new Thread(new ParameterizedThreadStart(connectionHandler));
-            cThread.Start();
+            cThread.Start(stream);
         }
 
         public bool Start()

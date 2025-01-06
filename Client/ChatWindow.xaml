@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="ChatWindow" Height="450" Width="800">
+        Title="ChatWindow" Height="450" Width="842"
+        MinHeight="300"
+        MinWidth="400">
     <Grid>
-        
+
+
+        <ListBox x:Name="ChatListBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Margin="10,10,10,50"  />
+        <TextBox Name="MessageTextBox" VerticalAlignment="Bottom" Margin="10,0,180,10" Height="30"/>
+
+        <Button Content="Disconnect" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Width="75" Height="30" />
+        <Button Content="Send" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,96,10" Width="75" Height="30" Click="Button_Click" />
     </Grid>
 </Window>
