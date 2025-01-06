@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections;
+using System.Net;
 using System.Net.Sockets;
 using System.Reflection.Metadata;
 using System.Text;
@@ -34,6 +35,12 @@ namespace Server
             }
         }
 
+        static void sendErrorID(ref NetworkStream stream, byte errorID)
+        {
+            byte[] errorBytes = { 1, errorID };
+            stream.Write(errorBytes, 0, errorBytes.Length);
+        }
+
         static void ReadStream(object obj) 
         {
             // giving the object through this way because of threads
@@ -41,7 +48,7 @@ namespace Server
 
             NetworkStream stream = client.GetStream();
 
-            User thisUser = null;
+            User? thisUser = null;
 
             bool connected = true;
 
@@ -73,8 +80,7 @@ namespace Server
                             User? exist = Users.FirstOrDefault(user => user.username.Equals(username), null);
                             if (exist != null)
                             {
-                                byte[] errorBytes = { 1, 1 };
-                                stream.Write(errorBytes, 0, errorBytes.Length);
+                                sendErrorID(ref stream, 1);
                                 break;
                             }
 
@@ -90,6 +96,11 @@ namespace Server
                             break;
                         case 2:
                             Console.WriteLine("Disconnect");
+                            if (thisUser != null)
+                            {
+                                Users.Remove(thisUser);
+                                thisUser = null;
+                            }
                             break;
                         case 3:
                             Console.WriteLine("MSG");
@@ -101,7 +112,23 @@ namespace Server
                             Console.WriteLine("SYNC");
                             break;
                         case 6:
-                            Console.WriteLine("RECONNECT");
+                            Console.WriteLine("Reconnect");
+
+                            // Receive Token String
+                            int reconTokenLength = stream.ReadByte();
+                            byte[] reconTokenBytes = new byte[reconTokenLength];
+                            stream.ReadExactly(reconTokenBytes, 0, reconTokenLength);
+                            string reconToken = Encoding.Unicode.GetString(reconTokenBytes);
+
+                            // Check if Token exists
+                            User? user = Users.FirstOrDefault(user => user.token.GetToken().Equals(reconToken));
+                            if (user == null)
+                            {
+                                sendErrorID(ref stream, 2);
+                                break;
+                            }
+                            stream.WriteByte(6);
+                            thisUser = user;
                             break;
                     }
                 }
