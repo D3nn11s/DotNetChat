@@ -1,10 +1,10 @@
 Client Packet Types:
     * LOGIN : 1 (byte Länge, string (der Bytes solange Länge) Username) -> (byte Länge, REST Token)
     * DISCONNECT : 2 (byte CauseID)
-    * MSG : 4  (ushort Length, string Message)
-    * PM : 5 (byte Länge, string username,  byte LängeMessage, string Message) 
-    * SYNC : 6
-    * RECONNECT : 7 (byte Länge, string Token)
+    * MSG : 3  (ushort Length, string Message)
+    * PM : 4 (byte Länge, string username,  byte LängeMessage, string Message) 
+    * SYNC : 5
+    * RECONNECT : 6 (byte Länge, string Token)
     
 Server Packet Types:
    * ERROR : 1 (byte PacketType, byte FehlerID)
