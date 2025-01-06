@@ -25,7 +25,8 @@ namespace Server
 
         static void ReadStream(object obj) 
         {
-            TcpClient client = (TcpClient)obj;  // horor 
+            // giving the object through this way because of threads
+            TcpClient client = (TcpClient)obj;  
 
             NetworkStream stream = client.GetStream();
 
@@ -41,12 +42,25 @@ namespace Server
                         break;
                     case 1:
                         Console.WriteLine("login");
-                        int length = stream.ReadByte();
+
+                        // Length of username read from the clients first byte
+                        int length = stream.ReadByte(); 
                         byte[] buffer = new byte[length];
+                        // Reads the username
                         stream.ReadExactly(buffer, 0, length);
 
                         string content = Encoding.Unicode.GetString(buffer);
                         Console.WriteLine("Name: " + content);
+
+                        
+                        string token = Token.GenerateToken(); // ToDo: Include saving this to the user, object oriented, and stuff like that
+                        byte[] tokenbytes = Encoding.Unicode.GetBytes(token);
+                        byte[] sendBytes = new byte[tokenbytes.Length + 1];
+                        sendBytes[0] = Convert.ToByte(tokenbytes.Length);
+                        tokenbytes.CopyTo(sendBytes, 1);
+
+                        stream.Write(sendBytes, 0, sendBytes.Length);
+
 
 
                         break;
@@ -71,4 +85,35 @@ namespace Server
             Console.WriteLine("Client Disconnected.");
         }
     }
+
+    class User
+    {
+        string username;
+        Token token;
+    }
+    public class Token
+    {
+        string token;
+        DateTime validUntil;
+
+
+
+
+
+
+
+        static public string GenerateToken()
+        {
+            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder result = new StringBuilder();
+            Random random = new Random();
+
+            for (int i = 0; i< 32; ++i) 
+            {
+                result.Append(chars[random.Next(chars.Length)]);
+            }
+
+            return result.ToString();
+        }
+}
 }
