@@ -135,13 +135,24 @@ namespace Client
                             // ERROR : 1 (byte PacketType, byte FehlerID)
                             break;
                         case 2:
-                            int length = s.ReadByte();
-                            byte[] buffer = new byte[length];
+                            //  MSG : 2 (byte Länge, string username, byte längeMessage, string message)
+                            int lengthUser = s.ReadByte();
+                            byte[] buffer = new byte[lengthUser];
 
-                            s.ReadExactly(buffer, 0, length);
+                            s.ReadExactly(buffer, 0, lengthUser);
 
                             string username = Encoding.Unicode.GetString(buffer);
-                            // TODO: adding messages
+
+                            
+
+                            int lengthMessage = s.ReadByte();
+                            buffer = new byte[lengthMessage];
+
+                            s.ReadExactly(buffer, 0, lengthMessage);
+
+                            string message = Encoding.Unicode.GetString(buffer);
+
+                            Global.ChatMessages.Add(new ChatMessage(username, message));
                             break;
 
                         case 3:

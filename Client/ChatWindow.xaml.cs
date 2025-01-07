@@ -21,13 +21,12 @@ namespace Client
     public partial class ChatWindow : Window
     {
 
-        public ObservableCollection<ChatMessage> ChatMessages { get; set; }
         public ChatWindow()
         {
             InitializeComponent();
 
-            ChatMessages = new ObservableCollection<ChatMessage>();
-            ChatListBox.ItemsSource = ChatMessages;
+            Global.ChatMessages = new ObservableCollection<ChatMessage>();
+            ChatListBox.ItemsSource = Global.ChatMessages;
         }
 
         private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -41,20 +40,11 @@ namespace Client
 
             if (!string.IsNullOrWhiteSpace(message))
             {
-                ChatMessages.Add(new ChatMessage { User = "You", Message = message });
+                Global.ChatMessages.Add(new ChatMessage { User = "You", Message = message });
                 MessageTextBox.Text = "";
             }
         }
     }
 
-    public class ChatMessage
-    {
-        public string User { get; set; }
-        public string Message { get; set; }
-
-        public override string ToString()
-        {
-            return User + ": " + Message;
-        }
-    }
+   
 }
