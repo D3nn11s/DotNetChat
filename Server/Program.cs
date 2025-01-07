@@ -41,6 +41,36 @@ namespace Server
             stream.Write(errorBytes, 0, errorBytes.Length);
         }
 
+        static void broadcastMessageToAll(ChatMessage message) 
+            //  THIS MIGHT NOT BE WORKING CORRECTLY
+        {
+            Console.WriteLine("sent");
+            byte[] userBytes = Encoding.Unicode.GetBytes(message.Username);
+            byte[] messageBytes = Encoding.Unicode.GetBytes(message.Message);
+
+            byte[] messageBuffer = new byte[3 + messageBytes.Length + userBytes.Length];
+
+            UInt16 messageBytesLength = Convert.ToUInt16(messageBytes.Length);
+
+            var lengthMessagebytes = BitConverter.GetBytes(messageBytesLength);
+
+            messageBuffer[0] = (byte)2;
+            messageBuffer[1] = (byte)userBytes.Length;
+
+            // copy username into messagepacket
+            userBytes.CopyTo(messageBuffer, 2); // 2 + length of userbytes
+
+            // copy length of message into packet
+            lengthMessagebytes.CopyTo(messageBuffer, userBytes.Length + 2);
+
+            messageBytes.CopyTo(messageBuffer, userBytes.Length + lengthMessagebytes.Length + 2);
+
+            foreach (var user in Users) {
+            
+            user.stream.Write(messageBuffer, 0, messageBytes.Length);
+            }
+        }
+
         static void ReadStream(object obj) 
         {
             // giving the object through this way because of threads
@@ -91,7 +121,7 @@ namespace Server
                             tokenbytes.CopyTo(sendBytes, 1);
                             stream.Write(sendBytes, 0, sendBytes.Length);
 
-                            thisUser = new User(username, token);
+                            thisUser = new User(username, token, stream);
                             Users.Add(thisUser);
                             break;
                         case 2:
@@ -104,6 +134,13 @@ namespace Server
                             break;
                         case 3:
                             Console.WriteLine("MSG");
+                            int messageLength = stream.ReadByte();
+                            byte[] messagebuffer = new byte[messageLength];
+
+                            stream.ReadExactly(messagebuffer, 0, messageLength);
+                            string message = Encoding.Unicode.GetString(messagebuffer);
+
+                            broadcastMessageToAll(new ChatMessage(thisUser.username, message));
                             break;
                         case 4:
                             Console.WriteLine("PM");
