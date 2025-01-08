@@ -42,17 +42,19 @@ namespace Server
         }
 
         static void broadcastMessageToAll(ChatMessage message) 
-            //  THIS MIGHT NOT BE WORKING CORRECTLY
+            //  Fixed (maybe), still take a look at this
         {
             Console.WriteLine("sent");
             byte[] userBytes = Encoding.Unicode.GetBytes(message.Username);
             byte[] messageBytes = Encoding.Unicode.GetBytes(message.Message);
 
-            byte[] messageBuffer = new byte[3 + messageBytes.Length + userBytes.Length];
+            
 
             UInt16 messageBytesLength = Convert.ToUInt16(messageBytes.Length);
 
             var lengthMessagebytes = BitConverter.GetBytes(messageBytesLength);
+
+            byte[] messageBuffer = new byte[2 + messageBytes.Length + userBytes.Length + lengthMessagebytes.Length];
 
             messageBuffer[0] = (byte)2;
             messageBuffer[1] = (byte)userBytes.Length;
