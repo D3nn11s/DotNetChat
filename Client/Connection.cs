@@ -22,6 +22,8 @@ namespace Client
         private TcpClient client;
         private Thread cThread;
 
+        private NetworkStream stream;
+
         public Connection(IPEndPoint endPoint, string username) {
             this.endpoint = endPoint;
             this.username = username;
@@ -53,7 +55,7 @@ namespace Client
                 {
                     return false;
                 }
-                NetworkStream stream = client.GetStream();
+                stream = client.GetStream();
 
                 // Now send our Login Attempt
                 byte[] usernameBytes = Encoding.Unicode.GetBytes(username);
@@ -117,6 +119,11 @@ namespace Client
             client.Dispose();
         }
 
+        public void sendPacket(byte[] buffer)
+        {
+            stream.Write(buffer, 0, buffer.Length);
+        }
+
         private void connectionHandler(object streamObj)
         {
             NetworkStream s = (NetworkStream)streamObj;
@@ -154,21 +161,24 @@ namespace Client
                             //  MSG : 2 (byte Länge, string username, byte längeMessage, string message)
                             int lengthUser = s.ReadByte();
                             byte[] buffer = new byte[lengthUser];
-
+                            
                             s.ReadExactly(buffer, 0, lengthUser);
 
                             string username = Encoding.Unicode.GetString(buffer);
 
                             
 
-                            int lengthMessage = s.ReadByte();
-                            buffer = new byte[lengthMessage];
+                            int lengthMessage1 = s.ReadByte();
+                            int lengthMessage2 = s.ReadByte();
 
-                            s.ReadExactly(buffer, 0, lengthMessage);
+                            UInt16 result = (UInt16)((lengthMessage2 << 8) | lengthMessage1);
+                            buffer = new byte[result];
+
+                            s.ReadExactly(buffer, 0, result);
 
                             string message = Encoding.Unicode.GetString(buffer);
 
-                            Global.ChatMessages.Add(new ChatMessage(username, message));
+                            Application.Current.Dispatcher.Invoke(() => Global.ChatMessages.Add(new ChatMessage(username, message)));
                             break;
 
                         case 3:

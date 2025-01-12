@@ -12,6 +12,7 @@ namespace Server
         static HashSet<User> Users = new HashSet<User>();
         static LinkedList<Message> Messages = new LinkedList<Message>();
 
+
         static void Main(string[] args)
         {
             TcpListener listener = new TcpListener(IPAddress.IPv6Any, 5063);
@@ -42,11 +43,9 @@ namespace Server
         }
 
         static void broadcastMessageToAll(Message message) 
-            //  Fixed (maybe), still take a look at this
         {
-            Console.WriteLine("sent");
-            byte[] userBytes = Encoding.Unicode.GetBytes(message.getUsername());
-            byte[] messageBytes = Encoding.Unicode.GetBytes(message.getContent());
+            byte[] userBytes = Encoding.Unicode.GetBytes(message.Username);
+            byte[] messageBytes = Encoding.Unicode.GetBytes(message.Message);
 
             
 
@@ -69,7 +68,7 @@ namespace Server
 
             foreach (var user in Users) {
             
-            user.stream.Write(messageBuffer, 0, messageBytes.Length);
+            user.stream.Write(messageBuffer, 0, messageBuffer.Length);
             }
         }
 
@@ -129,29 +128,29 @@ namespace Server
                             break;
                         case 2:
                             Console.WriteLine("Disconnect");
-                            if (thisUser != null)
-                            {
-                                Users.Remove(thisUser);
-                                thisUser = null;
-                            }
+                            connected = false;
                             break;
                         case 3:
                             Console.WriteLine("MSG");
-
                             if (thisUser == null)
                             {
                                 // TODO: Send error to client
                                 break;
                             }
+                            int messageLength1 = stream.ReadByte();
+                            int messageLength2 = stream.ReadByte();
+                            UInt16 result = (UInt16)((messageLength2 << 8) | messageLength1); // big endian format
+                            byte[] messagebuffer = new byte[result];
 
                             int messageLength = stream.ReadByte();
                             byte[] messagebuffer = new byte[messageLength];
 
-                            stream.ReadExactly(messagebuffer, 0, messageLength);
+                            stream.ReadExactly(messagebuffer, 0, result);
                             string message = Encoding.Unicode.GetString(messagebuffer);
                             ChatMessage msg = new ChatMessage(thisUser, message);
                             Messages.AddLast(msg);
                             broadcastMessageToAll(msg);
+                                
                             break;
                         case 4:
                             Console.WriteLine("PM");
@@ -190,6 +189,11 @@ namespace Server
             }
             client.Close();
             client.Dispose();
+            if (thisUser != null)
+            {
+                Users.Remove(thisUser);
+                thisUser = null;
+            }
             Console.WriteLine("Client Disconnected.");
         }
     }

@@ -25,6 +25,7 @@ namespace Client
         {
             InitializeComponent();
 
+
             Global.ChatMessages = new ObservableCollection<ChatMessage>();
             ChatListBox.ItemsSource = Global.ChatMessages;
         }
@@ -40,7 +41,23 @@ namespace Client
 
             if (!string.IsNullOrWhiteSpace(message))
             {
-                Global.ChatMessages.Add(new ChatMessage("you", message));
+                // ChatListBox.Dispatcher.Invoke(() => Global.ChatMessages.Add(new ChatMessage("you", message)));
+                byte[] messageBytes = Encoding.Unicode.GetBytes(message);
+
+                UInt16 messageBytesLength = Convert.ToUInt16(messageBytes.Length); 
+
+                var lengthMessagebytes = BitConverter.GetBytes(messageBytesLength); // 2 bytes 
+
+                byte[] messageBuffer = new byte[1 + messageBytes.Length + lengthMessagebytes.Length];
+
+                messageBuffer[0] = (byte)3; // packetid
+
+                // copy length of message into packet
+                lengthMessagebytes.CopyTo(messageBuffer, 1);
+
+                messageBytes.CopyTo(messageBuffer, lengthMessagebytes.Length + 1);
+
+                Global.connection.sendPacket(messageBuffer);
                 MessageTextBox.Text = "";
             }
         }

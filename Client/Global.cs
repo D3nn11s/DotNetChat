@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Net;
+using System.Windows.Controls;
 
 namespace Client
 {
@@ -9,7 +10,7 @@ namespace Client
         public static IPEndPoint IPEndPoint;
         public static Connection connection;
 
-        public static ObservableCollection<ChatMessage> ChatMessages { get; set; }
-        
+        public static ObservableCollection<ChatMessage> ChatMessages;
+
     }
 }
