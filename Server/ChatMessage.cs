@@ -6,15 +6,11 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    public class ChatMessage
+    public class ChatMessage : Message
     {
-        public string Username { get; set; }
-        public string Message { get; set; }
-        
-        public ChatMessage(string Username, string Message)
-        {
-            this.Username = Username;
-            this.Message = Message;
+        public User Sender;
+        public ChatMessage(User Sender, string Message) : base(Message, Sender.username) {
+            this.Sender = Sender;
         }
     }
 }

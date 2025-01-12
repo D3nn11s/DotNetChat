@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection.Metadata;
@@ -10,7 +10,7 @@ namespace Server
     {
 
         static HashSet<User> Users = new HashSet<User>();
-
+        static LinkedList<Message> Messages = new LinkedList<Message>();
 
         static void Main(string[] args)
         {
@@ -41,12 +41,12 @@ namespace Server
             stream.Write(errorBytes, 0, errorBytes.Length);
         }
 
-        static void broadcastMessageToAll(ChatMessage message) 
+        static void broadcastMessageToAll(Message message) 
             //  Fixed (maybe), still take a look at this
         {
             Console.WriteLine("sent");
-            byte[] userBytes = Encoding.Unicode.GetBytes(message.Username);
-            byte[] messageBytes = Encoding.Unicode.GetBytes(message.Message);
+            byte[] userBytes = Encoding.Unicode.GetBytes(message.getUsername());
+            byte[] messageBytes = Encoding.Unicode.GetBytes(message.getContent());
 
             
 
@@ -137,13 +137,21 @@ namespace Server
                             break;
                         case 3:
                             Console.WriteLine("MSG");
+
+                            if (thisUser == null)
+                            {
+                                // TODO: Send error to client
+                                break;
+                            }
+
                             int messageLength = stream.ReadByte();
                             byte[] messagebuffer = new byte[messageLength];
 
                             stream.ReadExactly(messagebuffer, 0, messageLength);
                             string message = Encoding.Unicode.GetString(messagebuffer);
-
-                            broadcastMessageToAll(new ChatMessage(thisUser.username, message));
+                            ChatMessage msg = new ChatMessage(thisUser, message);
+                            Messages.AddLast(msg);
+                            broadcastMessageToAll(msg);
                             break;
                         case 4:
                             Console.WriteLine("PM");
