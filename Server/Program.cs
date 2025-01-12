@@ -44,8 +44,8 @@ namespace Server
 
         static void broadcastMessageToAll(Message message) 
         {
-            byte[] userBytes = Encoding.Unicode.GetBytes(message.Username);
-            byte[] messageBytes = Encoding.Unicode.GetBytes(message.Message);
+            byte[] userBytes = Encoding.Unicode.GetBytes(message.getUsername());
+            byte[] messageBytes = Encoding.Unicode.GetBytes(message.getContent());
 
             
 
@@ -141,9 +141,6 @@ namespace Server
                             int messageLength2 = stream.ReadByte();
                             UInt16 result = (UInt16)((messageLength2 << 8) | messageLength1); // big endian format
                             byte[] messagebuffer = new byte[result];
-
-                            int messageLength = stream.ReadByte();
-                            byte[] messagebuffer = new byte[messageLength];
 
                             stream.ReadExactly(messagebuffer, 0, result);
                             string message = Encoding.Unicode.GetString(messagebuffer);
