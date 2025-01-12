@@ -120,12 +120,28 @@ namespace Client
         private void connectionHandler(object streamObj)
         {
             NetworkStream s = (NetworkStream)streamObj;
+            bool ExpectHeartbeat = false;
             try
             {
                 while (run)
                 {
-                    int PacketID = s.ReadByte();
-
+                    int PacketID;
+                    try { 
+                    PacketID = s.ReadByte();
+                    }
+                    catch (System.IO.IOException)
+                    {
+                        if (ExpectHeartbeat)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            s.WriteByte(7);
+                            ExpectHeartbeat = true;
+                            continue;
+                        }
+                    }
                     switch (PacketID)
                     {
                         case -1:
@@ -167,10 +183,13 @@ namespace Client
                         case 6:
                             // Success
                             break;
+                        case 7:
+                            // server heartbeat answer
+                            ExpectHeartbeat = false;
+                            break;
 
                     }
-                    // Base Logic
-                    break; // Temporary Breakout
+
                 }
             } finally
             {

@@ -93,6 +93,7 @@ namespace Server
                     switch (packetID)
                     {
                         case -1:
+                            Console.WriteLine("Disconnect Packet");
                             connected = false;
                             break;
                         case 1:
@@ -168,6 +169,10 @@ namespace Server
                             }
                             stream.WriteByte(6);
                             thisUser = user;
+                            break;
+                        case 7:
+                            // heartbeat packet response to client
+                            stream.WriteByte(7);
                             break;
                     }
                 }
