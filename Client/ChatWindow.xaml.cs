@@ -40,7 +40,7 @@ namespace Client
 
             if (!string.IsNullOrWhiteSpace(message))
             {
-                Global.ChatMessages.Add(new ChatMessage { User = "You", Message = message });
+                Global.ChatMessages.Add(new ChatMessage("you", message));
                 MessageTextBox.Text = "";
             }
         }
