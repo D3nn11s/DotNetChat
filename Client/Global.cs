@@ -12,5 +12,13 @@ namespace Client
 
         public static ObservableCollection<ChatMessage> ChatMessages;
 
+        public static void Reset()
+        {
+            connection.sendPacket(new byte[] { 2 });
+            connection.Stop();
+            connection = null;
+            ChatMessages.Clear();
+            ChatMessages = null;
+        }
     }
 }

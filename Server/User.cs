@@ -25,5 +25,10 @@ namespace Server
         {
             return this.username.GetHashCode() + this.token.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return this.username;
+        }
     }
 }

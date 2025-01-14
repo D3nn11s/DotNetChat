@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace Client
 {
@@ -28,24 +29,58 @@ namespace Client
 
             Global.ChatMessages = new ObservableCollection<ChatMessage>();
             ChatListBox.ItemsSource = Global.ChatMessages;
+            Global.ChatMessages.CollectionChanged += this.scrollOnMessage;
         }
 
-        private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void scrollOnMessage(object sender, NotifyCollectionChangedEventArgs args)
         {
+            if (args.NewItems != null)
+            {
+                ScrollViewer? v = GetScrollViewer(ChatListBox);
+                
+                if (v != null && (v.ScrollableHeight - v.VerticalOffset) == 0)
+                {
+                    int lastIndex = args.NewItems.Count - 1;
+                    ChatListBox.ScrollIntoView(args.NewItems[lastIndex]);
+                }
+            }
+        }
 
+        private ScrollViewer? GetScrollViewer(DependencyObject parent)
+        {
+            int c = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < c; i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is ScrollViewer tChild)
+                {
+                    return tChild;
+                }
+
+                ScrollViewer? childOfChild = GetScrollViewer(child);
+                if (childOfChild != null)
+                {
+                    return childOfChild;
+                }
+            }
+
+            return null;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string message = MessageTextBox.Text;
+            sendMessage();
+        }
 
+        private void sendMessage()
+        {
+            string message = MessageTextBox.Text;
             if (!string.IsNullOrWhiteSpace(message))
             {
                 // ChatListBox.Dispatcher.Invoke(() => Global.ChatMessages.Add(new ChatMessage("you", message)));
                 byte[] messageBytes = Encoding.Unicode.GetBytes(message);
-
-                UInt16 messageBytesLength = Convert.ToUInt16(messageBytes.Length); 
-
+                UInt16 messageBytesLength = Convert.ToUInt16(messageBytes.Length);
                 var lengthMessagebytes = BitConverter.GetBytes(messageBytesLength); // 2 bytes 
 
                 byte[] messageBuffer = new byte[1 + messageBytes.Length + lengthMessagebytes.Length];
@@ -58,7 +93,25 @@ namespace Client
                 messageBytes.CopyTo(messageBuffer, lengthMessagebytes.Length + 1);
 
                 Global.connection.sendPacket(messageBuffer);
+
                 MessageTextBox.Text = "";
+                MessageTextBox.Focus();
+            }
+        }
+
+        private void disconnect_Button(object sender, RoutedEventArgs e)
+        {
+            Global.Reset();
+            MainWindow mw = new MainWindow();
+            mw.Show();
+            this.Close();
+        }
+
+        private void MessageTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                sendMessage();
             }
         }
     }

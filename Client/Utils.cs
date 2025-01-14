@@ -25,7 +25,6 @@ namespace Client
             }
         }
 
-
         public static (int, IPEndPoint?) ParseIP(string ip)
         {
             if (ip.Length < 1)

@@ -29,10 +29,10 @@ namespace Client
             this.username = username;
         }
 
-        private void startCThread(NetworkStream stream)
+        private void startCThread()
         {
-            cThread = new Thread(new ParameterizedThreadStart(connectionHandler));
-            cThread.Start(stream);
+            cThread = new Thread(new ThreadStart(connectionHandler));
+            cThread.Start();
         }
 
         public bool Start()
@@ -88,7 +88,7 @@ namespace Client
 
                 // All good now! We should be connected at this point.
                 // Let's start this Client Thread and allow Packets to be parsed.
-                startCThread(stream);
+                startCThread();
             }
             catch (SocketException e)
             {
@@ -106,9 +106,6 @@ namespace Client
                 return false;
             }
 
-            
-            
-
             return true;
         }
 
@@ -124,17 +121,17 @@ namespace Client
             stream.Write(buffer, 0, buffer.Length);
         }
 
-        private void connectionHandler(object streamObj)
+        private void connectionHandler()
         {
-            NetworkStream s = (NetworkStream)streamObj;
             bool ExpectHeartbeat = false;
             try
             {
                 while (run)
                 {
                     int PacketID;
-                    try { 
-                    PacketID = s.ReadByte();
+                    try
+                    {
+                        PacketID = stream.ReadByte();
                     }
                     catch (System.IO.IOException)
                     {
@@ -144,7 +141,7 @@ namespace Client
                         }
                         else
                         {
-                            s.WriteByte(7);
+                            stream.WriteByte(7);
                             ExpectHeartbeat = true;
                             continue;
                         }
@@ -159,22 +156,20 @@ namespace Client
                             break;
                         case 2:
                             //  MSG : 2 (byte Länge, string username, byte längeMessage, string message)
-                            int lengthUser = s.ReadByte();
+                            int lengthUser = stream.ReadByte();
                             byte[] buffer = new byte[lengthUser];
-                            
-                            s.ReadExactly(buffer, 0, lengthUser);
+
+                            stream.ReadExactly(buffer, 0, lengthUser);
 
                             string username = Encoding.Unicode.GetString(buffer);
 
-                            
-
-                            int lengthMessage1 = s.ReadByte();
-                            int lengthMessage2 = s.ReadByte();
+                            int lengthMessage1 = stream.ReadByte();
+                            int lengthMessage2 = stream.ReadByte();
 
                             UInt16 result = (UInt16)((lengthMessage2 << 8) | lengthMessage1);
                             buffer = new byte[result];
 
-                            s.ReadExactly(buffer, 0, result);
+                            stream.ReadExactly(buffer, 0, result);
 
                             string message = Encoding.Unicode.GetString(buffer);
 
@@ -201,9 +196,11 @@ namespace Client
                     }
 
                 }
+            } catch (IOException) {
+            } catch (ObjectDisposedException) {
             } finally
             {
-                s.Close();
+                stream.Close();
             }
         }
     }

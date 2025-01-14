@@ -92,12 +92,9 @@ namespace Server
                     switch (packetID)
                     {
                         case -1:
-                            Console.WriteLine("Disconnect Packet");
                             connected = false;
                             break;
                         case 1:
-                            Console.WriteLine("Login");
-
                             // Length of username read from the clients first byte
                             int length = stream.ReadByte();
                             byte[] buffer = new byte[length];
@@ -105,7 +102,6 @@ namespace Server
                             stream.ReadExactly(buffer, 0, length);
 
                             string username = Encoding.Unicode.GetString(buffer);
-                            Console.WriteLine("Username: " + username);
 
                             // Check if Username exists,
                             // if null, then it doesn't exist yet. Allow this user to temporarily own it.
@@ -125,21 +121,21 @@ namespace Server
 
                             thisUser = new User(username, token, stream);
                             Users.Add(thisUser);
+                            Console.WriteLine("User logged in: " + thisUser);
                             break;
                         case 2:
-                            Console.WriteLine("Disconnect");
+                            Console.WriteLine("Disconnect Packet: " + thisUser);
                             connected = false;
                             break;
                         case 3:
-                            Console.WriteLine("MSG");
                             if (thisUser == null)
                             {
-                                // TODO: Send error to client
+                                sendErrorID(ref stream, 3);
                                 break;
                             }
                             int messageLength1 = stream.ReadByte();
                             int messageLength2 = stream.ReadByte();
-                            UInt16 result = (UInt16)((messageLength2 << 8) | messageLength1); // big endian format
+                            UInt16 result = (UInt16)((messageLength2 << 8) | messageLength1); // little endian format
                             byte[] messagebuffer = new byte[result];
 
                             stream.ReadExactly(messagebuffer, 0, result);
@@ -151,6 +147,7 @@ namespace Server
                             break;
                         case 4:
                             Console.WriteLine("PM");
+
                             break;
                         case 5:
                             Console.WriteLine("SYNC");
@@ -173,6 +170,7 @@ namespace Server
                             }
                             stream.WriteByte(6);
                             thisUser = user;
+                            user.token.resetValidity();
                             break;
                         case 7:
                             // heartbeat packet response to client
@@ -182,8 +180,9 @@ namespace Server
                 }
             } catch (IOException e)
             {
-                Console.WriteLine("Client Error " + e.Message);
+                Console.WriteLine("Client Error " + e.Message + " @ User: " + thisUser);
             }
+            Console.WriteLine("Client Disconnected: " + thisUser);
             client.Close();
             client.Dispose();
             if (thisUser != null)
@@ -191,7 +190,6 @@ namespace Server
                 Users.Remove(thisUser);
                 thisUser = null;
             }
-            Console.WriteLine("Client Disconnected.");
         }
     }
 }
