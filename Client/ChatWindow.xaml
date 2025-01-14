@@ -14,7 +14,11 @@
         <ListBox x:Name="ChatListBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Margin="10,10,10,50" UseLayoutRounding="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ClipToBounds="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+                    <TextBlock TextWrapping="Wrap">
+                        <Run Text="{Binding User}" FontWeight="Bold" />
+                        <Run>: </Run>
+                        <Run Text="{Binding Message}" />
+                    </TextBlock>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
