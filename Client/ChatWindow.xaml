@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="DotNetChat : " Height="450" Width="842"
         MinHeight="300"
-        MinWidth="400">
+        MinWidth="400" Closed="Window_Closed">
     <Grid>
 
 
