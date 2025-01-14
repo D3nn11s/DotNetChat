@@ -14,11 +14,15 @@ namespace Client
 
         public static void Reset()
         {
-            connection.sendPacket(new byte[] { 2 });
-            connection.Stop();
-            connection = null;
-            ChatMessages.Clear();
-            ChatMessages = null;
+            if (connection != null)
+            {
+                connection.sendPacket(new byte[] { 2 });
+                connection.Stop();
+                connection = null;
+                ChatMessages.Clear();
+                ChatMessages = null;
+            }
+            
         }
     }
 }

@@ -202,9 +202,9 @@ namespace Client
 
                             Application.Current.Dispatcher.Invoke(() => Global.ChatMessages.Add(new ChatMessage(pmUsername, pmMessage, new SolidColorBrush(Color.FromRgb(234, 207, 255)))));
                             break;
-                        case 4:
-                            // DISCONNECT : 4 (byte CauseID)
-                            break;
+                        //case 4:
+                        //    // DISCONNECT : 4 (byte CauseID)
+                        //    break;
                         case 5:
                             // SYNCRESPONSE: 5 (byte anzahlnachrichten(* MSG : 2 (byte Länge, string username, byte längeMessage, string message))
                             break;
