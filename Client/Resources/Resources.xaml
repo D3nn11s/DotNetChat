@@ -12,5 +12,8 @@
         <system:String x:Key="ipParseError">Couldn't parse the IP!</system:String>
         <system:String x:Key="invalidHost">Host not found!</system:String>
         <system:String x:Key="invalidPortNumber">The Port "{0}" is invalid! Please provide a Port Number between 0 and 65536.</system:String>
+        <system:String x:Key="NET1">Username already exists!</system:String>
+        <system:String x:Key="NET2">Invalid Token!</system:String>
+        <system:String x:Key="NET3">You are not logged in!</system:String>
     </ResourceDictionary>
 </ResourceDictionary>
