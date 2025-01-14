@@ -10,14 +10,22 @@ namespace Client
         /// <br></br>
         /// Gibt <b>null</b> zurück bei keinem Treffer.
         /// </summary>
-        /// <param name="w">Fenster-Kontext</param>
         /// <param name="key">Schlüssel der Error Nachricht</param>
         /// <returns>Die übersetze Error Nachricht</returns>
-        public static string? GetErrorMessage(Window w, string key)
+        public static string? GetErrorMessage(string key)
         {
             try
             {
-                return (string)((ResourceDictionary)w.FindResource("errors"))[key];
+                var dictionary = (ResourceDictionary)Application.Current.Resources["errors"];
+
+                if (dictionary.Contains(key))
+                {
+                    return dictionary[key].ToString();
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception)
             {

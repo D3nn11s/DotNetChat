@@ -77,8 +77,9 @@ namespace Client
                 int size = buf[0];
                 if (size < 2)
                 {
-                    // Do Error Message Handeling here
-                    // TODO Get Type of Error like "Username Taken"
+                    int errorID = stream.ReadByte();
+                    string error = Utils.GetErrorMessage("NET" + Convert.ToString(errorID));
+                    MessageBox.Show(error, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return false;
                 }
 
@@ -154,6 +155,9 @@ namespace Client
                             break;
                         case 1:
                             // ERROR : 1 (byte PacketType, byte FehlerID)
+                            int errorID = stream.ReadByte();
+                            string error = Utils.GetErrorMessage("NET"+Convert.ToString(errorID));
+                            MessageBox.Show(error, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                             break;
                         case 2:
                             //  MSG : 2 (byte Länge, string username, byte längeMessage, string message)

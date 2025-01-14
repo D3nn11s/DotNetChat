@@ -38,7 +38,7 @@ namespace Client
             string username = CleanUpUsername(usernameTextbox.Text);
             if (username.Length < 1)
             {
-                MessageBox.Show(Utils.GetErrorMessage(this, "noUsername"), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Utils.GetErrorMessage("noUsername"), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             string ip = ipTextbox.Text.Trim();
@@ -51,7 +51,7 @@ namespace Client
                     Global.connection = new Connection(res, username);
                     if (!Global.connection.Start())
                     {
-                        MessageBox.Show(string.Format(Utils.GetErrorMessage(this, "failedToConnect"), res.ToString()), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(string.Format(Utils.GetErrorMessage("failedToConnect"), res.ToString()), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
                         break;
                     }
                     ChatWindow cw = new ChatWindow();
@@ -59,13 +59,13 @@ namespace Client
                     this.Close();
                     break;
                 case 1:
-                    MessageBox.Show(Utils.GetErrorMessage(this, "ipParseError"), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Utils.GetErrorMessage("ipParseError"), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
                     break;
                 case 2:
-                    MessageBox.Show(Utils.GetErrorMessage(this, "invalidHost"), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Utils.GetErrorMessage("invalidHost"), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
                     break;
                 case 3:
-                    MessageBox.Show(string.Format(Utils.GetErrorMessage(this, "invalidPortNumber"), ip.Split(":")[1]), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(string.Format(Utils.GetErrorMessage("invalidPortNumber"), ip.Split(":")[1]), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
                     break;
             }
         }
