@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Client
@@ -11,6 +13,11 @@ namespace Client
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private string CleanUpUsername(string rawUsername)
+        {
+            return Regex.Replace(rawUsername, @"\s+", "");
         }
 
         private void connectButton_Click(object sender, RoutedEventArgs e)
@@ -28,7 +35,7 @@ namespace Client
 
         private void connect()
         {
-            string username = usernameTextbox.Text.Trim();
+            string username = CleanUpUsername(usernameTextbox.Text);
             if (username.Length < 1)
             {
                 MessageBox.Show(Utils.GetErrorMessage(this, "noUsername"), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -61,6 +68,16 @@ namespace Client
                     MessageBox.Show(string.Format(Utils.GetErrorMessage(this, "invalidPortNumber"), ip.Split(":")[1]), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
                     break;
             }
+        }
+
+        private void usernameTextbox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            TextBox? tb = sender as TextBox;
+            if (tb == null) return;
+            int index = tb.CaretIndex;
+            int length = tb.Text.Length;
+            tb.Text = CleanUpUsername(usernameTextbox.Text);
+            tb.CaretIndex = index - (length - tb.Text.Length);
         }
     }
 }

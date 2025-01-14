@@ -12,7 +12,7 @@
         <StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Label Content="{DynamicResource username}" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.873,-5.413"/>
-                <TextBox x:Name="usernameTextbox" MaxLength="16" HorizontalAlignment="Left" Margin="5,5,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" KeyDown="Textbox_KeyDown"/>
+                <TextBox x:Name="usernameTextbox" MaxLength="16" HorizontalAlignment="Left" Margin="5,5,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" KeyDown="Textbox_KeyDown" TextChanged="usernameTextbox_TextChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Label Content="{DynamicResource ip}" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.873,-5.413"/>
