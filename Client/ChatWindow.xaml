@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="ChatWindow" Height="450" Width="842"
+        Title="DotNetChat : " Height="450" Width="842"
         MinHeight="300"
         MinWidth="400">
     <Grid>
@@ -14,7 +14,7 @@
         <ListBox x:Name="ChatListBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Margin="10,10,10,50" UseLayoutRounding="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ClipToBounds="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock TextWrapping="Wrap">
+                    <TextBlock TextWrapping="Wrap" Background="{Binding msgColor}">
                         <Run Text="{Binding User}" FontWeight="Bold" />
                         <Run>: </Run>
                         <Run Text="{Binding Message}" />
@@ -22,7 +22,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <TextBox Name="MessageTextBox" VerticalAlignment="Bottom" Margin="10,0,180,12" Height="25" VerticalContentAlignment="Center" KeyDown="MessageTextBox_KeyDown"/>
+        <TextBox Name="MessageTextBox" VerticalAlignment="Bottom" Margin="10,0,180,12" Height="25" VerticalContentAlignment="Center" KeyDown="MessageTextBox_KeyDown" MaxLength="4000"/>
 
         <Button Content="Disconnect" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Width="75" Height="30" Click="disconnect_Button" />
         <Button Content="Send" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,96,10" Width="75" Height="30" Click="Button_Click" />

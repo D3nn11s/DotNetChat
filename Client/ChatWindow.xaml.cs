@@ -26,6 +26,7 @@ namespace Client
         {
             InitializeComponent();
 
+            this.Title += Global.username;
 
             Global.ChatMessages = new ObservableCollection<ChatMessage>();
             ChatListBox.ItemsSource = Global.ChatMessages;
@@ -78,21 +79,61 @@ namespace Client
             string message = MessageTextBox.Text;
             if (!string.IsNullOrWhiteSpace(message))
             {
-                // ChatListBox.Dispatcher.Invoke(() => Global.ChatMessages.Add(new ChatMessage("you", message)));
-                byte[] messageBytes = Encoding.Unicode.GetBytes(message);
-                UInt16 messageBytesLength = Convert.ToUInt16(messageBytes.Length);
-                var lengthMessagebytes = BitConverter.GetBytes(messageBytesLength); // 2 bytes 
+                if (message.StartsWith("/pm "))
+                {
+                    message = message.Substring(4);
+                    int index = message.IndexOf(' ');
+                    if (index == -1)
+                    {
+                        return;
+                    }
+                    string targetUsername = message.Substring(0, index);
+                    message = message.Substring(index + 1);
 
-                byte[] messageBuffer = new byte[1 + messageBytes.Length + lengthMessagebytes.Length];
+                    if (message.Length < 1 || targetUsername.Length < 1)
+                    {
+                        return;
+                    }
 
-                messageBuffer[0] = (byte)3; // packetid
+                    // ChatListBox.Dispatcher.Invoke(() => Global.ChatMessages.Add(new ChatMessage("you", message)));
+                    byte[] messageBytes = Encoding.Unicode.GetBytes(message);
+                    UInt16 messageBytesLength = Convert.ToUInt16(messageBytes.Length);
+                    var lengthMessagebytes = BitConverter.GetBytes(messageBytesLength); // 2 bytes
+                    byte[] userBytes = Encoding.Unicode.GetBytes(targetUsername);
 
-                // copy length of message into packet
-                lengthMessagebytes.CopyTo(messageBuffer, 1);
+                    byte[] messageBuffer = new byte[2 + userBytes.Length + messageBytes.Length + lengthMessagebytes.Length];
 
-                messageBytes.CopyTo(messageBuffer, lengthMessagebytes.Length + 1);
+                    messageBuffer[0] = (byte)4; // packetid
+                    messageBuffer[1] = (byte)userBytes.Length;
 
-                Global.connection.sendPacket(messageBuffer);
+                    userBytes.CopyTo(messageBuffer, 2);
+
+                    // copy length of message into packet
+                    lengthMessagebytes.CopyTo(messageBuffer, 2 + userBytes.Length);
+
+                    messageBytes.CopyTo(messageBuffer, lengthMessagebytes.Length + 2 + userBytes.Length);
+
+                    Global.connection.sendPacket(messageBuffer);
+                }
+                else
+                {
+
+                    // ChatListBox.Dispatcher.Invoke(() => Global.ChatMessages.Add(new ChatMessage("you", message)));
+                    byte[] messageBytes = Encoding.Unicode.GetBytes(message);
+                    UInt16 messageBytesLength = Convert.ToUInt16(messageBytes.Length);
+                    var lengthMessagebytes = BitConverter.GetBytes(messageBytesLength); // 2 bytes
+
+                    byte[] messageBuffer = new byte[1 + messageBytes.Length + lengthMessagebytes.Length];
+
+                    messageBuffer[0] = (byte)3; // packetid
+
+                    // copy length of message into packet
+                    lengthMessagebytes.CopyTo(messageBuffer, 1);
+
+                    messageBytes.CopyTo(messageBuffer, lengthMessagebytes.Length + 1);
+
+                    Global.connection.sendPacket(messageBuffer);
+                }
 
                 MessageTextBox.Text = "";
                 MessageTextBox.Focus();

@@ -47,8 +47,6 @@ namespace Server
             byte[] userBytes = Encoding.Unicode.GetBytes(message.getUsername());
             byte[] messageBytes = Encoding.Unicode.GetBytes(message.getContent());
 
-            
-
             UInt16 messageBytesLength = Convert.ToUInt16(messageBytes.Length);
 
             var lengthMessagebytes = BitConverter.GetBytes(messageBytesLength);
@@ -143,11 +141,32 @@ namespace Server
                             ChatMessage msg = new ChatMessage(thisUser, message);
                             Messages.AddLast(msg);
                             broadcastMessageToAll(msg);
-                                
                             break;
                         case 4:
-                            Console.WriteLine("PM");
-
+                            // PM
+                            if (thisUser == null)
+                            {
+                                sendErrorID(ref stream, 3);
+                                break;
+                            }
+                            int usernameLength = stream.ReadByte();
+                            byte[] usernameBytes = new byte[usernameLength];
+                            stream.ReadExactly(usernameBytes, 0, usernameLength);
+                            int pmMessageLength1 = stream.ReadByte();
+                            int pmMessageLength2 = stream.ReadByte();
+                            UInt16 pmMessagelength = (UInt16)((pmMessageLength2 << 8) | pmMessageLength1);
+                            byte[] messageBytes = new byte[pmMessagelength];
+                            stream.ReadExactly(messageBytes, 0, pmMessagelength);
+                            string PMUsername = Encoding.Unicode.GetString(usernameBytes);
+                            string PMMessage = Encoding.Unicode.GetString(messageBytes);
+                            User? pmTargetUser = Users.FirstOrDefault(user => user.username.Equals(PMUsername), null);
+                            if (pmTargetUser != null)
+                            {
+                                PrivateMessage pm = new PrivateMessage(thisUser, pmTargetUser, PMMessage);
+                                Messages.AddLast(pm);
+                                Console.WriteLine("PM: " + thisUser + " -> " + PMUsername + ": " + PMMessage);
+                                pmTargetUser.sendPrivateMsg(pm);
+                            }
                             break;
                         case 5:
                             Console.WriteLine("SYNC");

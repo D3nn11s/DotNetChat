@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -18,7 +19,7 @@ namespace Client
         string username;
         private string token;
 
-        private bool run = true;
+        private volatile bool run = true;
         private TcpClient client;
         private Thread cThread;
 
@@ -178,6 +179,24 @@ namespace Client
 
                         case 3:
                             // PM : 3 (byte Länge, string vonUsername, byte längeMessage, string message)
+                            int lengthPMUser = stream.ReadByte();
+                            byte[] pmUsernameBytes = new byte[lengthPMUser];
+
+                            stream.ReadExactly(pmUsernameBytes, 0, lengthPMUser);
+
+                            string pmUsername = Encoding.Unicode.GetString(pmUsernameBytes);
+
+                            int pmLengthMessage1 = stream.ReadByte();
+                            int pmLengthMessage2 = stream.ReadByte();
+
+                            UInt16 pmLengthMessageLength = (UInt16)((pmLengthMessage2 << 8) | pmLengthMessage1);
+                            buffer = new byte[pmLengthMessageLength];
+
+                            stream.ReadExactly(buffer, 0, pmLengthMessageLength);
+
+                            string pmMessage = Encoding.Unicode.GetString(buffer);
+
+                            Application.Current.Dispatcher.Invoke(() => Global.ChatMessages.Add(new ChatMessage(pmUsername, pmMessage, new SolidColorBrush(Color.FromRgb(234, 207, 255)))));
                             break;
                         case 4:
                             // DISCONNECT : 4 (byte CauseID)
