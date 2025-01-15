@@ -120,7 +120,10 @@ namespace Client
 
         public void sendPacket(byte[] buffer)
         {
-            stream.Write(buffer, 0, buffer.Length);
+            if (stream != null)
+            {
+                stream.Write(buffer, 0, buffer.Length);
+            }
         }
 
         private void connectionHandler()
@@ -270,6 +273,14 @@ namespace Client
             } finally
             {
                 stream.Close();
+                stream = null;
+                Global.Reset();
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    MainWindow mw = new MainWindow();
+                    mw.Show();
+                    Application.Current.Windows[0].Close();
+                });
             }
         }
     }
