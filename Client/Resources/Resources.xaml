@@ -15,5 +15,6 @@
         <system:String x:Key="NET1">Username already exists!</system:String>
         <system:String x:Key="NET2">Invalid Token!</system:String>
         <system:String x:Key="NET3">You are not logged in!</system:String>
+        <system:String x:Key="NET4">User not found!</system:String>
     </ResourceDictionary>
 </ResourceDictionary>

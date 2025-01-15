@@ -58,6 +58,10 @@ namespace Server
                     }
                 }
             }
+            if (Messages.Count > 20)
+            {
+                Messages.RemoveFirst();
+            }
             if (Messages.Count > 200)
             {
                 int c = Messages.Count - 200;
@@ -200,10 +204,12 @@ namespace Server
                                 Messages.AddLast(pm);
                                 Console.WriteLine("PM: " + thisUser + " -> " + PMUsername + ": " + PMMessage);
                                 pmTargetUser.sendPrivateMsg(pm);
+                            } else
+                            {
+                                sendErrorID(ref stream, 4);
                             }
                             break;
                         case 5:
-                            Console.WriteLine("SYNC");
                             int amountMessages = Math.Min(Messages.Count, 200);
                             List<byte> syncMessageBuffer = new List<byte>();
                             syncMessageBuffer.Add(5);

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using System.Windows;
 
 namespace Client
@@ -74,5 +75,70 @@ namespace Client
             return (1, null);
         }
 
+
+        private static string tempFile { get
+            {
+                return Path.Combine(Path.GetTempPath(), "dotnetchat");
+            }
+        }
+        public static void storeSuccessfulConnectionDetails(string username, string ip, string token)
+        {
+            StreamWriter writer = File.CreateText(tempFile);
+            writer.WriteLine(username);
+            writer.WriteLine(ip);
+            writer.WriteLine(token);
+            writer.Close();
+        }
+
+        public static void clearConnectionDetails()
+        {
+            if (File.Exists(tempFile))
+            {
+                File.Delete(tempFile);
+            }
+        }
+
+        public static ConnectionDetails? getSuccessfulConnectionDetails()
+        {
+            try
+            {
+                string path = tempFile;
+                if (File.Exists(path))
+                {
+                    StreamReader reader = File.OpenText(path);
+                    try
+                    {
+                        string username = reader.ReadLine();
+                        string ip = reader.ReadLine();
+                        string token = reader.ReadLine();
+                        if (username == null || username.Length < 1 || ip == null || ip.Length < 1 || token == null || token.Length < 1)
+                        {
+                            return null;
+                        }
+                        return new ConnectionDetails(username, ip, token);
+                    }
+                    finally
+                    {
+                        reader.Close();
+                    }
+            }
+            } catch (Exception ex)
+            {
+                Console.WriteLine("Failed to read temp file -> " + ex.Message);
+            }
+            return null;
+        }
+        public class ConnectionDetails
+        {
+            public string username;
+            public IPEndPoint ip;
+            public string token;
+            public ConnectionDetails(string username, string ip, string token)
+            {
+                this.username = username;
+                this.ip = IPEndPoint.Parse(ip);
+                this.token = token;
+            }
+        }
     }
 }

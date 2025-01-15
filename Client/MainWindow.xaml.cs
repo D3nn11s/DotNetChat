@@ -46,6 +46,23 @@ namespace Client
             switch (code)
             {
                 case 0:
+                    Utils.ConnectionDetails details = Utils.getSuccessfulConnectionDetails();
+                    if (details != null && username.Equals(details.username) && res.Equals(details.ip))
+                    {
+                        Global.username = details.username;
+                        Global.IPEndPoint = details.ip;
+                        Global.connection = new Connection(details.ip, details.username, details.token);
+                        if (!Global.connection.Reconnect())
+                        {
+                            Utils.clearConnectionDetails();
+                        } else
+                        {
+                            ChatWindow cwr = new ChatWindow();
+                            cwr.Show();
+                            this.Close();
+                            break;
+                        }
+                    }
                     Global.username = username;
                     Global.IPEndPoint = res;
                     Global.connection = new Connection(res, username);
