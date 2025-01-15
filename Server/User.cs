@@ -11,14 +11,16 @@ namespace Server
     {
         public string username { get; }
         public Token token { get; }
+        public bool loggedIn { get; set;  }
 
-        public NetworkStream stream { get; }
+        public NetworkStream stream { get; set; }
 
         public User(string username, Token token, NetworkStream stream)
         {
             this.username = username;
             this.token = token;
             this.stream = stream;
+            loggedIn = true;
         }
 
         public override int GetHashCode()

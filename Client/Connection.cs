@@ -238,7 +238,7 @@ namespace Client
                                     byte[] messageBytes = new byte[messageLength];
                                     stream.ReadExactly(messageBytes, 0, messageLength);
                                     string message1 = Encoding.Unicode.GetString(messageBytes);
-                                    Application.Current.Dispatcher.Invoke(() => Global.ChatMessages.Add(new ChatMessage(username1, message1, new SolidColorBrush(Color.FromRgb(234, 207, 255)))));
+                                    Application.Current.Dispatcher.Invoke(() => Global.ChatMessages.Insert(0, new ChatMessage(username1, message1, new SolidColorBrush(Color.FromRgb(234, 207, 255)))));
                                 }
                                 else if (msgIdentifier == 2) // Normal message identifier
                                 {
@@ -250,7 +250,7 @@ namespace Client
                                     stream.ReadExactly(messageBytes, 0, messageLength);
                                     string message1 = Encoding.Unicode.GetString(messageBytes);
 
-                                    Application.Current.Dispatcher.Invoke(() => Global.ChatMessages.Add(new ChatMessage(username1, message1)));
+                                    Application.Current.Dispatcher.Invoke(() => Global.ChatMessages.Insert(0, new ChatMessage(username1, message1)));
                                 }
                             }
                             break;

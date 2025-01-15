@@ -8,7 +8,7 @@ namespace Server
 {
     public class Token
     {
-        static TimeSpan Lifetime = TimeSpan.FromHours(24);
+        static TimeSpan Lifetime = TimeSpan.FromHours(2);
         private static int TOKENLENGTH = 32;
 
         private string token;

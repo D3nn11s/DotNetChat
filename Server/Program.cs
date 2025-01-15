@@ -12,7 +12,6 @@ namespace Server
         static HashSet<User> Users = new HashSet<User>();
         static LinkedList<Message> Messages = new LinkedList<Message>();
 
-
         static void Main(string[] args)
         {
             TcpListener listener = new TcpListener(IPAddress.IPv6Any, 5063);
@@ -24,6 +23,9 @@ namespace Server
             listener.Server.SendBufferSize = 32768;
             listener.Start();
 
+            var autoEvent = new AutoResetEvent(false);
+            Timer watchDog = new Timer(watchDogRoutine, autoEvent, 30000, 60000);
+
             Console.WriteLine("Listening...");
 
             while (true)
@@ -33,6 +35,36 @@ namespace Server
 
                 Thread Read = new Thread(ReadStream);
                 Read.Start(client);
+            }
+        }
+
+
+        static void watchDogRoutine(Object stateInfo)
+        {
+            AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
+            DateTime now = DateTime.Now;
+
+            foreach (User user in Users)
+            {
+                if (user.token.isExpired(now))
+                {
+                    if (user.loggedIn)
+                    {
+                        user.token.resetValidity();
+                    }
+                    else
+                    {
+                        Users.Remove(user);
+                    }
+                }
+            }
+            if (Messages.Count > 200)
+            {
+                int c = Messages.Count - 200;
+                for (int i = 0; i < c; ++i)
+                {
+                    Messages.RemoveFirst();
+                }
             }
         }
 
@@ -65,8 +97,10 @@ namespace Server
             messageBytes.CopyTo(messageBuffer, userBytes.Length + lengthMessagebytes.Length + 2);
 
             foreach (var user in Users) {
-            
-            user.stream.Write(messageBuffer, 0, messageBuffer.Length);
+                if (user.loggedIn)
+                {
+                    user.stream.Write(messageBuffer, 0, messageBuffer.Length);
+                }
             }
         }
 
@@ -170,12 +204,14 @@ namespace Server
                             break;
                         case 5:
                             Console.WriteLine("SYNC");
-                            int amountMessages = Messages.Count;
+                            int amountMessages = Math.Min(Messages.Count, 200);
                             List<byte> syncMessageBuffer = new List<byte>();
                             syncMessageBuffer.Add(5);
                             syncMessageBuffer.Add((byte)amountMessages);
 
-                            foreach (Message m in Messages)
+                            int i = 0;
+                            var iter = Messages.Reverse();
+                            foreach (Message m in iter)
                             {
                                 byte[] usersBytes = Encoding.Unicode.GetBytes(m.getUsername());
                                 byte[] messagesBytes = Encoding.Unicode.GetBytes(m.getContent());
@@ -235,6 +271,8 @@ namespace Server
                             }
                             stream.WriteByte(6);
                             thisUser = user;
+                            thisUser.stream = stream;
+                            thisUser.loggedIn = true;
                             user.token.resetValidity();
                             break;
                         case 7:
@@ -248,13 +286,12 @@ namespace Server
                 Console.WriteLine("Client Error " + e.Message + " @ User: " + thisUser);
             }
             Console.WriteLine("Client Disconnected: " + thisUser);
-            client.Close();
-            client.Dispose();
             if (thisUser != null)
             {
-                Users.Remove(thisUser);
-                thisUser = null;
+                thisUser.loggedIn = false;
             }
+            client.Close();
+            client.Dispose();
         }
     }
 }

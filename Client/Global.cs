@@ -16,13 +16,14 @@ namespace Client
         {
             if (connection != null)
             {
-                connection.sendPacket(new byte[] { 2 });
+                try
+                {
+                    connection.sendPacket(new byte[] { 2 });
+                } catch { }
                 connection.Stop();
                 connection = null;
-                ChatMessages.Clear();
                 ChatMessages = null;
             }
-            
         }
     }
 }

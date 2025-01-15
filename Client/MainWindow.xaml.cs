@@ -51,6 +51,7 @@ namespace Client
                     Global.connection = new Connection(res, username);
                     if (!Global.connection.Start())
                     {
+                        Global.Reset();
                         MessageBox.Show(string.Format(Utils.GetErrorMessage("failedToConnect"), res.ToString()), "DotNetChat", MessageBoxButton.OK, MessageBoxImage.Error);
                         break;
                     }
