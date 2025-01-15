@@ -275,12 +275,16 @@ namespace Client
                 stream.Close();
                 stream = null;
                 Global.Reset();
-                Application.Current.Dispatcher.Invoke(() =>
+                try
                 {
-                    MainWindow mw = new MainWindow();
-                    mw.Show();
-                    Application.Current.Windows[0].Close();
-                });
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        MainWindow mw = new MainWindow();
+                        mw.Show();
+                        Application.Current.Windows[0].Close();
+                    });
+                }
+                catch (Exception ex) { /* Ignore */ }
             }
         }
     }
