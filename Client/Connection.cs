@@ -125,6 +125,7 @@ namespace Client
 
         private void connectionHandler()
         {
+            sendPacket(new byte[] { 5 });
             bool ExpectHeartbeat = false;
             try
             {
@@ -207,6 +208,51 @@ namespace Client
                         //    break;
                         case 5:
                             // SYNCRESPONSE: 5 (byte anzahlnachrichten(* MSG : 2 (byte Länge, string username, byte längeMessage, string message))
+                            // Read the number of messages
+                            int amountMessages = stream.ReadByte();
+
+                            for (int i = 0; i < amountMessages; i++)
+                            {
+                                int msgIdentifier = stream.ReadByte();
+                                if (msgIdentifier == 3)
+                                {
+                                    break;
+                                }
+
+                                int userLength = stream.ReadByte();
+                                byte[] userBytes = new byte[userLength];
+                                stream.ReadExactly(userBytes, 0, userLength);
+                                string username1 = Encoding.Unicode.GetString(userBytes);
+
+                                if (msgIdentifier == 4) // PM identifier
+                                {
+                                    int targetUserLength = stream.ReadByte();
+                                    byte[] targetUserBytes = new byte[targetUserLength];
+                                    stream.ReadExactly(targetUserBytes, 0, targetUserLength);
+                                    string targetUsername = Encoding.Unicode.GetString(targetUserBytes);
+
+                                    // Read the message length (UInt16)
+                                    int messageLength1 = stream.ReadByte();
+                                    int messageLength2 = stream.ReadByte();
+                                    UInt16 messageLength = (UInt16)((messageLength2 << 8) | messageLength1);
+                                    byte[] messageBytes = new byte[messageLength];
+                                    stream.ReadExactly(messageBytes, 0, messageLength);
+                                    string message1 = Encoding.Unicode.GetString(messageBytes);
+                                    Application.Current.Dispatcher.Invoke(() => Global.ChatMessages.Add(new ChatMessage(username1, message1, new SolidColorBrush(Color.FromRgb(234, 207, 255)))));
+                                }
+                                else if (msgIdentifier == 2) // Normal message identifier
+                                {
+                                    // Read the message length (UInt16)
+                                    int messageLength1 = stream.ReadByte();
+                                    int messageLength2 = stream.ReadByte();
+                                    UInt16 messageLength = (UInt16)((messageLength2 << 8) | messageLength1);
+                                    byte[] messageBytes = new byte[messageLength];
+                                    stream.ReadExactly(messageBytes, 0, messageLength);
+                                    string message1 = Encoding.Unicode.GetString(messageBytes);
+
+                                    Application.Current.Dispatcher.Invoke(() => Global.ChatMessages.Add(new ChatMessage(username1, message1)));
+                                }
+                            }
                             break;
                         case 6:
                             // Success

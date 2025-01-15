@@ -170,6 +170,52 @@ namespace Server
                             break;
                         case 5:
                             Console.WriteLine("SYNC");
+                            int amountMessages = Messages.Count;
+                            List<byte> syncMessageBuffer = new List<byte>();
+                            syncMessageBuffer.Add(5);
+                            syncMessageBuffer.Add((byte)amountMessages);
+
+                            foreach (Message m in Messages)
+                            {
+                                byte[] usersBytes = Encoding.Unicode.GetBytes(m.getUsername());
+                                byte[] messagesBytes = Encoding.Unicode.GetBytes(m.getContent());
+
+                                byte usersLength = (byte)usersBytes.Length;
+                                UInt16 messagesLength = (UInt16)messagesBytes.Length;
+                                byte messagesLength1 = (byte)(messagesLength & 0xFF);
+                                byte messagesLength2 = (byte)((messagesLength >> 8) & 0xFF);
+
+                                if (m is PrivateMessage pm)
+                                {
+                                    if (pm.Target.username != thisUser.username)
+                                    {
+                                        continue;
+                                    }
+                                    byte[] targetUserBytes = Encoding.Unicode.GetBytes(pm.Target.username);
+                                    byte targetUserLength = (byte)targetUserBytes.Length;
+
+                                    syncMessageBuffer.Add(4); // PM identifier
+                                    syncMessageBuffer.Add(usersLength);
+                                    syncMessageBuffer.AddRange(usersBytes);
+                                    syncMessageBuffer.Add(targetUserLength);
+                                    syncMessageBuffer.AddRange(targetUserBytes);
+                                    syncMessageBuffer.Add(messagesLength1);
+                                    syncMessageBuffer.Add(messagesLength2);
+                                    syncMessageBuffer.AddRange(messagesBytes);
+                                }
+                                else
+                                {
+                                    syncMessageBuffer.Add(2); // MSG identifier
+                                    syncMessageBuffer.Add(usersLength);
+                                    syncMessageBuffer.AddRange(usersBytes);
+                                    syncMessageBuffer.Add(messagesLength1);
+                                    syncMessageBuffer.Add(messagesLength2);
+                                    syncMessageBuffer.AddRange(messagesBytes);
+                                }
+                            }
+
+                            byte[] syncMessageArray = syncMessageBuffer.ToArray();
+                            stream.Write(syncMessageArray, 0, syncMessageArray.Length);
                             break;
                         case 6:
                             Console.WriteLine("Reconnect");
