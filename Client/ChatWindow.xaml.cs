@@ -143,9 +143,6 @@ namespace Client
         private void disconnect_Button(object sender, RoutedEventArgs e)
         {
             Global.Reset();
-            MainWindow mw = new MainWindow();
-            mw.Show();
-            this.Close();
         }
 
         private void MessageTextBox_KeyDown(object sender, KeyEventArgs e)
