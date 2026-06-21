@@ -16,7 +16,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Label Content="{DynamicResource ip}" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.873,-5.413"/>
-                <TextBox x:Name="ipTextbox" HorizontalAlignment="Left" Margin="5,5,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="lions-heart.de" KeyDown="Textbox_KeyDown"/>
+                <TextBox x:Name="ipTextbox" HorizontalAlignment="Left" Margin="5,5,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Text="localhost" KeyDown="Textbox_KeyDown"/>
             </StackPanel>
             <Button x:Name="connectButton" Content="{DynamicResource connect}" HorizontalAlignment="Center" Margin="0,10,0,15" VerticalAlignment="Top" Click="connectButton_Click"/>
         </StackPanel>

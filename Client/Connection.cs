@@ -238,7 +238,7 @@ namespace Client
                         }
                         catch (System.IO.IOException)
                         {
-                            if (ExpectHeartbeat)
+                            if (ExpectHeartbeat || stream == null)
                             {
                                 break;
                             }
