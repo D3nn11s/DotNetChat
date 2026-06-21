@@ -26,7 +26,7 @@ namespace Server
             var autoEvent = new AutoResetEvent(false);
             Timer watchDog = new Timer(watchDogRoutine, autoEvent, 30000, 60000);
 
-            Console.WriteLine("Listening...");
+            Console.WriteLine("Listening on port 5063.");
 
             while (true)
             {
